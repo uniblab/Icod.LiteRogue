@@ -114,12 +114,12 @@ Use test class names matching the filters below: `FoundationTests`, `WorldTests`
 **Depends on:** Reviewed plan.  
 **Files:** Root solution/build settings; the two projects; test projects; command, coordinate, rules, session, snapshot, and result files; view/input seams; initial build/CI files.
 
-- [ ] Create the solution and project references: app → Model and Icod.DCurses; Model → .NET only. Pin the SDK and stable packages. Make only the application packable.
-- [ ] Define the contracts above and a minimal fixed-level session fixture. New runs have depth 1, full health, starting equipment, zero potions, and `Playing` status.
-- [ ] Add `NewRunStartsFresh` and `SnapshotCannotMutateModel`; assert depth/status/resources and prove that attempted snapshot changes cannot alter the session.
-- [ ] Add a dependency check rejecting Icod.DCurses references in the Model project.
-- [ ] Adopt the shared build/distribution conventions selectively. Local checks use Debug; PR validation uses Staging; main validation uses Release. Keep exactly one root solution. Prepare the application's `1.0.0-alpha.1` tool metadata, README/license inclusion, and tagged prerelease workflow before the first published alpha; T1007 strengthens distribution acceptance.
-- [ ] Run `dotnet test Icod.LiteRogue.sln --filter FullyQualifiedName~Foundation`; require all foundation cases to pass. Run the build script and commit.
+- [x] Create the solution and project references: app → Model and Icod.DCurses; Model → .NET only. Pin the SDK and stable packages. Make only the application packable.
+- [x] Define the contracts above and a minimal fixed-level session fixture. New runs have depth 1, full health, starting equipment, zero potions, and `Playing` status.
+- [x] Add `NewRunStartsFresh` and `SnapshotCannotMutateModel`; assert depth/status/resources and prove that attempted snapshot changes cannot alter the session.
+- [x] Add a dependency check rejecting Icod.DCurses references in the Model project.
+- [x] Adopt the shared build/distribution conventions selectively. Local checks use Debug; PR validation uses Staging; main validation uses Release. Keep exactly one root solution. Prepare the application's `1.0.0-alpha.1` tool metadata, README/license inclusion, and tagged prerelease workflow before the first published alpha; T1007 strengthens distribution acceptance.
+- [x] Run `dotnet test Icod.LiteRogue.sln --filter FullyQualifiedName~Foundation`; require all foundation cases to pass. Run the build script and commit.
 
 **Exit:** A headless Model can be driven and inspected through a stable application seam. No terminal is required by its tests.
 
@@ -128,11 +128,11 @@ Use test class names matching the filters below: `FoundationTests`, `WorldTests`
 **Depends on:** T1000.  
 **Files:** `World/DungeonLevel.cs`, `DungeonGenerator.cs`, `Visibility.cs`; generation/visibility tests.
 
-- [ ] Add `RoomsStayWithinSectors`, `AllWalkableTilesConnected`, `SingleRoomHasDistinctEntryAndObjective`, and `GenerationRepeatsForSeed`. Assert one room at most per sector, valid bounds, distinct reachable entry/exit, and identical terrain for repeated inputs.
-- [ ] Implement the fixed dimensions, room occupancy, spanning-tree corridors, entry/exit reservations, and level-10 goal reservation.
-- [ ] Add `RoomEntryRevealsInterior`, `ExploredTerrainPersists`, `HiddenEntitiesAreAbsent`, and `CorridorVisibilityStopsAtWalls`.
-- [ ] Implement explored/currently-visible sets and filtered snapshots. Returning to an explored room must not expose creatures there before it becomes currently visible.
-- [ ] Run `dotnet test Icod.LiteRogue.sln --filter FullyQualifiedName~World`; sweep seeds 0–999 at depths 1–10 for bounds, connectivity, and objective reachability. Print seed/depth on any failure and commit.
+- [x] Add `RoomsStayWithinSectors`, `AllWalkableTilesConnected`, `SingleRoomHasDistinctEntryAndObjective`, and `GenerationRepeatsForSeed`. Assert one room at most per sector, valid bounds, distinct reachable entry/exit, and identical terrain for repeated inputs.
+- [x] Implement the fixed dimensions, room occupancy, spanning-tree corridors, entry/exit reservations, and level-10 goal reservation.
+- [x] Add `RoomEntryRevealsInterior`, `ExploredTerrainPersists`, `HiddenEntitiesAreAbsent`, and `CorridorVisibilityStopsAtWalls`.
+- [x] Implement explored/currently-visible sets and filtered snapshots. Returning to an explored room must not expose creatures there before it becomes currently visible.
+- [x] Run `dotnet test Icod.LiteRogue.sln --filter FullyQualifiedName~World`; sweep seeds 0–999 at depths 1–10 for bounds, connectivity, and objective reachability. Print seed/depth on any failure and commit.
 
 **Exit:** Procedural floors are reproducible, traversable, and presented with the approved fog behavior.
 

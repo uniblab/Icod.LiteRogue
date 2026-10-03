@@ -1,1 +1,3 @@
-Console.WriteLine("Icod.LiteRogue 1.0.0-alpha.1 — development foundation");
+using Icod.LiteRogue;
+using Icod.LiteRogue.Terminal;
+return await Application.RunAsync(args,Console.Out,Console.Error,DCursesTerminalHost.OpenAsync);
