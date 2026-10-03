@@ -2,7 +2,8 @@ param(
     [ValidateSet('Debug', 'Staging', 'Release')]
     [string]$Configuration = 'Release',
 
-    [switch]$SkipPackageValidation
+    [switch]$SkipPackageValidation,
+    [string]$RuntimeIdentifier = ''
 )
 
 $ErrorActionPreference = 'Stop'
@@ -49,8 +50,23 @@ try {
 
         & (Join-Path $PSScriptRoot 'VerifyPackageArtifact.ps1') `
             -ArtifactDirectory $packageDirectory `
-            -Configuration $Configuration `
-            -AllowNoPackages
+            -Configuration $Configuration
+        $packages = @(Get-ChildItem -LiteralPath $packageDirectory -Filter '*.nupkg' -File)
+        if ($packages.Count -ne 1) { throw 'Expected exactly one tool package.' }
+        $version = (Get-PackageMetadata -PackagePath $packages[0].FullName).Version
+        & (Join-Path $PSScriptRoot 'VerifyToolInstall.ps1') -PackageDirectory $packageDirectory -Version $version
+        if (-not [string]::IsNullOrWhiteSpace($RuntimeIdentifier)) {
+            & (Join-Path $PSScriptRoot 'BuildReleaseArchive.ps1') -RuntimeIdentifier $RuntimeIdentifier -Configuration $Configuration -Version $version -ArchiveBaseName 'Icod.LiteRogue'
+            $extractedRoot = Join-Path $validationRoot "extracted/$RuntimeIdentifier"
+            Expand-Archive -LiteralPath (Join-Path $repositoryRoot "artifacts/release/Icod.LiteRogue-$version-$RuntimeIdentifier.zip") -DestinationPath $extractedRoot
+            $archiveExecutable = Join-Path $extractedRoot "Icod.LiteRogue-$version-$RuntimeIdentifier/Icod.LiteRogue"
+            if ($RuntimeIdentifier.StartsWith('win-')) { $archiveExecutable += '.exe' }
+            else { & chmod +x $archiveExecutable; if ($LASTEXITCODE -ne 0) { throw 'Could not set extracted executable permissions.' } }
+            $reportedVersion = & $archiveExecutable --version
+            if ($LASTEXITCODE -ne 0 -or ($reportedVersion -join '').Trim() -ne $version) { throw 'Archive executable version mismatch.' }
+            & $archiveExecutable --help
+            if ($LASTEXITCODE -ne 0) { throw 'Archive executable help failed.' }
+        }
     }
 
     Write-Host ''

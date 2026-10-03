@@ -41,14 +41,23 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            name: Windows
-            verify_packages: false
-          - os: ubuntu-latest
-            name: Linux
-            verify_packages: true
-          - os: macos-latest
-            name: macOS
-            verify_packages: false
+            name: Windows x64
+            rid: win-x64
+          - os: windows-11-arm
+            name: Windows ARM64
+            rid: win-arm64
+          - os: ubuntu-24.04
+            name: Linux x64
+            rid: linux-x64
+          - os: ubuntu-24.04-arm
+            name: Linux ARM64
+            rid: linux-arm64
+          - os: macos-15-intel
+            name: macOS x64
+            rid: osx-x64
+          - os: macos-15
+            name: macOS ARM64
+            rid: osx-arm64
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
     steps:
@@ -56,35 +65,17 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-      - name: Restore
-        run: dotnet restore '${{ needs.metadata.outputs.solution_path }}'
-      - name: Build
-        run: >-
-          dotnet build '${{ needs.metadata.outputs.solution_path }}'
-          -c ${{ env.CONFIGURATION }}
-          --no-restore
-          -p:ContinuousIntegrationBuild=true
-      - name: Test
-        run: >-
-          dotnet test '${{ needs.metadata.outputs.solution_path }}'
-          -c ${{ env.CONFIGURATION }}
-          --no-build
-          --no-restore
-          --logger trx
-      - name: Pack Staging artifacts
-        if: matrix.verify_packages
-        run: >-
-          dotnet pack '${{ needs.metadata.outputs.solution_path }}'
-          -c ${{ env.CONFIGURATION }}
-          --no-build
-          --no-restore
-          -o artifacts
-          -p:ContinuousIntegrationBuild=true
-      - name: Verify exact Staging package artifacts
-        if: matrix.verify_packages
+      - name: Verify Staging distribution
         shell: pwsh
         run: >-
-          ./packaging/VerifyPackageArtifact.ps1
-          -ArtifactDirectory artifacts
+          ./packaging/VerifyDistribution.ps1
           -Configuration '${{ env.CONFIGURATION }}'
-          -AllowNoPackages
+          -RuntimeIdentifier '${{ matrix.rid }}'
+      - name: Upload verified candidate
+        uses: actions/upload-artifact@v4
+        with:
+          name: candidate-${{ matrix.rid }}
+          path: |
+            artifacts/distribution-validation/packages/*.nupkg
+            artifacts/release/*.zip
+          if-no-files-found: error

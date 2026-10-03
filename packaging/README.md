@@ -114,14 +114,14 @@ publish-github-packages ──────┼── github-release
 archives ─────────────────────┘
 ```
 
-NuGet.org and GitHub Packages deliberately publish in parallel. Both consume the same validated package artifact. A partial registry publication is recoverable because both pushes use `--skip-duplicate`; GitHub Release creation still requires all applicable registry and archive jobs to succeed.
+Registry publication waits for all six executable archives to build successfully. NuGet.org and GitHub Packages then publish in parallel from the same validated package. Both pushes use `--skip-duplicate` for recovery after a partial publication; GitHub Release creation requires the registry and archive jobs to succeed.
 
 ## Release prerequisites
 
 Each repository that publishes to NuGet.org needs:
 
 - a GitHub environment named `Release`;
-- an Actions secret `NUGET_USER`; and
+- a NuGet username (defaults to the repository owner; an optional `NUGET_USER` Actions variable or existing secret overrides it); and
 - a NuGet.org Trusted Publishing policy for `release.yaml` and environment `Release`.
 
 GitHub Packages and GitHub Release use `GITHUB_TOKEN` with job-scoped permissions.

@@ -43,16 +43,22 @@ jobs:
         include:
           - os: windows-latest
             name: Windows x64
+            rid: win-x64
           - os: windows-11-arm
             name: Windows ARM64
+            rid: win-arm64
           - os: ubuntu-24.04
             name: Linux x64
+            rid: linux-x64
           - os: ubuntu-24.04-arm
             name: Linux ARM64
+            rid: linux-arm64
           - os: macos-15-intel
             name: macOS x64
+            rid: osx-x64
           - os: macos-15
             name: macOS ARM64
+            rid: osx-arm64
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
     steps:
@@ -65,3 +71,4 @@ jobs:
         run: >-
           ./packaging/VerifyDistribution.ps1
           -Configuration '${{ env.CONFIGURATION }}'
+          -RuntimeIdentifier '${{ matrix.rid }}'

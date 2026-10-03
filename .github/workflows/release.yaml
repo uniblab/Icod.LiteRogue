@@ -107,6 +107,10 @@ jobs:
           -ExpectedVersion '${{ needs.metadata.outputs.version }}'
           -GitHubOutputPath $env:GITHUB_OUTPUT
       - name: Verify exact release package artifacts
+        if: steps.select.outputs.package_count != '1'
+        shell: pwsh
+        run: throw 'The tag must match exactly one Icod.LiteRogue tool package version.'
+      - name: Verify exact release package artifacts
         if: steps.select.outputs.has_packages == 'true'
         shell: pwsh
         run: >-
@@ -166,7 +170,7 @@ jobs:
           retention-days: 7
 
   publish-nuget:
-    needs: [metadata, package]
+    needs: [metadata, package, archives]
     if: needs.package.outputs.has_packages == 'true'
     runs-on: ubuntu-latest
     environment: Release
@@ -185,7 +189,7 @@ jobs:
         id: nuget-login
         uses: NuGet/login@v1
         with:
-          user: ${{ secrets.NUGET_USER }}
+          user: ${{ vars.NUGET_USER || secrets.NUGET_USER || github.repository_owner }}
       - name: Publish to NuGet.org
         shell: pwsh
         env:
@@ -203,7 +207,7 @@ jobs:
           }
 
   publish-github-packages:
-    needs: [metadata, package]
+    needs: [metadata, package, archives]
     if: needs.package.outputs.has_packages == 'true'
     runs-on: ubuntu-latest
     permissions:

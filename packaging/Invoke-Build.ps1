@@ -42,6 +42,7 @@ function Invoke-Pack {
     Write-Host ''
     Write-Host "=== Pack ($Configuration) ==="
     New-Item -ItemType Directory -Path $artifactDirectory -Force | Out-Null
+    Get-ChildItem -LiteralPath $artifactDirectory -Filter 'Icod.LiteRogue.*.nupkg' -File | Remove-Item -Force
     Invoke-DotNet -Arguments @(
         'pack', $solutionPath,
         '-c', $Configuration,
@@ -56,8 +57,7 @@ function Invoke-Validate {
     Write-Host "=== Validate ($Configuration) ==="
     & (Join-Path $PSScriptRoot 'VerifyPackageArtifact.ps1') `
         -ArtifactDirectory $artifactDirectory `
-        -Configuration $Configuration `
-        -AllowNoPackages
+        -Configuration $Configuration
 }
 
 Push-Location $repositoryRoot

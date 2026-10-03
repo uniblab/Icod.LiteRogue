@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType><PackAsTool>true</PackAsTool><ToolCommandName>literogue</ToolCommandName>
-    <Version>1.0.0-alpha.1</Version><PackageVersion>1.0.0-alpha.1</PackageVersion><AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <Version>1.0.0-alpha.3</Version><PackageVersion>1.0.0-alpha.3</PackageVersion><AssemblyVersion>1.0.0.0</AssemblyVersion>
     <PackageId>Icod.LiteRogue</PackageId><Title>Icod.LiteRogue</Title><Authors>Timothy J. Bruce</Authors>
     <Description>A small turn-based Rogue-style dungeon game using Icod.DCurses.</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile><PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -13,5 +13,8 @@
     <PackageReference Include="Icod.DCurses" Version="2.2.0" />
     <None Include="../../README.md" Pack="true" PackagePath="/" />
     <None Include="../../LICENSE" Pack="true" PackagePath="/" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../THIRD-PARTY-NOTICES.md" Pack="true" PackagePath="/" />
+    <None Include="../../LICENSES/*" Pack="true" PackagePath="LICENSES/" />
+    <None Include="../../docs/Playing.md" Pack="true" PackagePath="docs/" />
   </ItemGroup>
 </Project>

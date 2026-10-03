@@ -22,8 +22,8 @@ Import-Module (Join-Path $PSScriptRoot 'RepositoryTools.psm1') -Force
 $solutionPath = Get-RepositorySolution -RepositoryRoot $repositoryRoot
 $projects = @(Get-SolutionProjects -SolutionPath $solutionPath -RepositoryRoot $repositoryRoot)
 $executables = @(Get-ExecutableProjects -ProjectPaths $projects -Configuration $Configuration)
-if (0 -eq $executables.Count) {
-    throw 'The solution contains no executable projects to archive.'
+if (1 -ne $executables.Count -or $executables[0].AssemblyName -ne 'Icod.LiteRogue') {
+    throw 'Expected exactly one product executable: Icod.LiteRogue.'
 }
 
 if ([string]::IsNullOrWhiteSpace($ArchiveBaseName)) {
@@ -89,12 +89,15 @@ try {
         $stagedExecutables += $stagedExecutable
     }
 
-    foreach ($supportFile in @('LICENSE', 'README.md')) {
+    foreach ($supportFile in @('LICENSE', 'README.md', 'THIRD-PARTY-NOTICES.md', 'docs/Playing.md')) {
         $source = Join-Path $repositoryRoot $supportFile
         if (Test-Path -LiteralPath $source -PathType Leaf) {
-            Copy-Item -LiteralPath $source -Destination (Join-Path $stageDirectory $supportFile)
+            $destination = Join-Path $stageDirectory $supportFile
+            New-Item -ItemType Directory -Path (Split-Path $destination -Parent) -Force | Out-Null
+            Copy-Item -LiteralPath $source -Destination $destination
         }
     }
+    Copy-Item -LiteralPath (Join-Path $repositoryRoot 'LICENSES') -Destination $stageDirectory -Recurse
 
     if ($RuntimeIdentifier.StartsWith('win-', [System.StringComparison]::OrdinalIgnoreCase)) {
         Compress-Archive -LiteralPath $stageDirectory -DestinationPath $archivePath -CompressionLevel Optimal

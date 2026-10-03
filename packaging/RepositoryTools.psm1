@@ -104,6 +104,8 @@ function Get-ExecutableProjects {
 
     $result = @()
     foreach ($projectPath in $ProjectPaths) {
+        $isTestProject = Get-MSBuildProperty -ProjectPath $projectPath -Name 'IsTestProject' -Configuration $Configuration
+        if ($isTestProject -eq 'true') { continue }
         $outputType = Get-MSBuildProperty -ProjectPath $projectPath -Name 'OutputType' -Configuration $Configuration
         if ($outputType -in @('Exe', 'WinExe')) {
             $assemblyName = Get-MSBuildProperty -ProjectPath $projectPath -Name 'AssemblyName' -Configuration $Configuration

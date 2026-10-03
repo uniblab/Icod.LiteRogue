@@ -54,7 +54,7 @@ Use modest, depth-based content tables: four weapon strengths beginning at 4, fo
 
 ## Planned file structure
 
-These are planned paths, not files created by this documentation PR.
+These paths are implemented in the development branch.
 
 | Path | Responsibility |
 | --- | --- |
@@ -141,12 +141,12 @@ Use test class names matching the filters below: `FoundationTests`, `WorldTests`
 **Depends on:** T1001.  
 **Files:** `GameSession.cs`; Controller, View, and Terminal files; movement/controller/lifecycle tests; initial `docs/Playing.md`.
 
-- [ ] Add `MovesInEightDirections`, `ClosedCornerBlocksMove`, `OneOpenSideAllowsDiagonal`, and `InvalidMoveDoesNotConsumeTurn`, including every map edge.
-- [ ] Implement movement commands and a DCurses map/HUD/message renderer using the Model snapshot. Add ASCII-compatible glyphs and a visible legend.
-- [ ] Implement the documented key mappings, help, quit, and `--seed <int>`, `--help`, `--version`. Invalid arguments report usage and exit before opening the terminal.
-- [ ] Add `KeyMappingMatchesDirections`, `ResizeDoesNotChangeSnapshot`, `HelpDoesNotAdvanceTurn`, `QuitDisposesHost`, and `InputFailureDisposesHost` through app-owned fake view/input seams.
-- [ ] Preserve map geometry at every terminal size; use a viewport or a size message when needed. Dispose terminal ownership on normal exit, cancellation, and failure.
-- [ ] Run `dotnet test Icod.LiteRogue.sln --filter "FullyQualifiedName~Movement|FullyQualifiedName~Controller|FullyQualifiedName~Terminal"`; perform live move/resize/quit checks and commit.
+- [x] Add `MovesInEightDirections`, `ClosedCornerBlocksMove`, `OneOpenSideAllowsDiagonal`, and `InvalidMoveDoesNotConsumeTurn`, including every map edge.
+- [x] Implement movement commands and a DCurses map/HUD/message renderer using the Model snapshot. Add ASCII-compatible glyphs and a visible legend.
+- [x] Implement the documented key mappings, help, quit, and `--seed <int>`, `--help`, `--version`. Invalid arguments report usage and exit before opening the terminal.
+- [x] Add `KeyMappingMatchesDirections`, `ResizeDoesNotChangeSnapshot`, `HelpDoesNotAdvanceTurn`, `QuitDisposesHost`, and `InputFailureDisposesHost` through app-owned fake view/input seams.
+- [x] Preserve map geometry at every terminal size; use a viewport or a size message when needed. Dispose terminal ownership on normal exit, cancellation, and failure.
+- [x] Run `dotnet test Icod.LiteRogue.sln --filter "FullyQualifiedName~Movement|FullyQualifiedName~Controller|FullyQualifiedName~Terminal"`; perform live move/resize/quit checks and commit.
 
 **Alpha.1 gate:** Explore a generated floor in the terminal with stable fog, HUD, eight-direction input, and clean exit. Early help/release notes identify descent/combat as not yet implemented.
 
@@ -155,12 +155,12 @@ Use test class names matching the filters below: `FoundationTests`, `WorldTests`
 **Depends on:** T1002.  
 **Files:** `Actors/Enemy.cs`, `Combat.cs`, `World/LevelPopulation.cs`, `GameSession.cs`; combat/turn tests.
 
-- [ ] Add `BumpAttackKeepsPlayerPosition`, `ArmorMitigatesWithMinimumOneDamage`, `ClosedCornerBlocksAttack`, and `EnemyUsesSameMovementRules`.
-- [ ] Implement weapon/armor-based damage and legal adjacent melee attacks.
-- [ ] Add `EachEnemyActsAtMostOnce`, `EnemiesNeverOverlap`, `RejectedCommandSkipsEnemyPhase`, and `DeathStopsRemainingEnemyActions`. Use fixed levels and stable enemy IDs.
-- [ ] Implement a sequential enemy phase, visibility-based pursuit/simple wandering, and depth-based enemy tiers. Population must never block the player entry.
-- [ ] Add `CommandsAfterDeathDoNothing`; implement the death screen and fresh-run action with a new seed and starting resources.
-- [ ] Run `dotnet test Icod.LiteRogue.sln --filter "FullyQualifiedName~Combat|FullyQualifiedName~Turns|FullyQualifiedName~Death"`; live-test corridor fights and death; commit.
+- [x] Add `BumpAttackKeepsPlayerPosition`, `ArmorMitigatesWithMinimumOneDamage`, `ClosedCornerBlocksAttack`, and `EnemyUsesSameMovementRules`.
+- [x] Implement weapon/armor-based damage and legal adjacent melee attacks.
+- [x] Add `EachEnemyActsAtMostOnce`, `EnemiesNeverOverlap`, `RejectedCommandSkipsEnemyPhase`, and `DeathStopsRemainingEnemyActions`. Use fixed levels and stable enemy IDs.
+- [x] Implement a sequential enemy phase, visibility-based pursuit/simple wandering, and depth-based enemy tiers. Population must never block the player entry.
+- [x] Add `CommandsAfterDeathDoNothing`; implement the death screen and fresh-run action with a new seed and starting resources.
+- [x] Run `dotnet test Icod.LiteRogue.sln --filter "FullyQualifiedName~Combat|FullyQualifiedName~Turns|FullyQualifiedName~Death"`; live-test corridor fights and death; commit.
 
 **Exit:** Combat and death obey the same Model rules in tests and in the application.
 
@@ -169,12 +169,12 @@ Use test class names matching the filters below: `FoundationTests`, `WorldTests`
 **Depends on:** T1003.  
 **Files:** `Items/Equipment.cs`, `Inventory.cs`, `GameRules.cs`, `World/LevelPopulation.cs`, `GameSession.cs`; item/healing tests.
 
-- [ ] Record exact initial enemy, weapon, armor, and depth-based loot tables in `GameRules` and the player guide. Maximum health remains 30 initially; potion healing remains 10 initially.
-- [ ] Add `WalkingCollectsLoot`, `OnlyBetterEquipmentReplacesCurrentItem`, and `PotionPickupIncrementsCount`; implement automatic collection without an inventory menu.
-- [ ] Add `PotionClampsToMaximum`, `DrinkingCostsOneTurn`, `EmptyInventoryRejectsDrink`, and `FullHealthRejectsDrink`. Assert health, potion count, and enemy-action count.
-- [ ] Add `PopulationRespectsReservedTiles` and `DensePopulationRemainsValid`; cap population to available floor tiles instead of retrying without a bound.
-- [ ] Render item messages and accurate resource totals. Add `InvalidDrinkDoesNotAdvanceRandomness`.
-- [ ] Run `dotnet test Icod.LiteRogue.sln --filter "FullyQualifiedName~Items|FullyQualifiedName~Healing|FullyQualifiedName~Population"`; live-test pickup, replacement, potion use under attack, and death; commit.
+- [x] Record exact initial enemy, weapon, armor, and depth-based loot tables in `GameRules` and the player guide. Maximum health remains 30 initially; potion healing remains 10 initially.
+- [x] Add `WalkingCollectsLoot`, `OnlyBetterEquipmentReplacesCurrentItem`, and `PotionPickupIncrementsCount`; implement automatic collection without an inventory menu.
+- [x] Add `PotionClampsToMaximum`, `DrinkingCostsOneTurn`, `EmptyInventoryRejectsDrink`, and `FullHealthRejectsDrink`. Assert health, potion count, and enemy-action count.
+- [x] Add `PopulationRespectsReservedTiles` and `DensePopulationRemainsValid`; cap population to available floor tiles instead of retrying without a bound.
+- [x] Render item messages and accurate resource totals. Add `InvalidDrinkDoesNotAdvanceRandomness`.
+- [x] Run `dotnet test Icod.LiteRogue.sln --filter "FullyQualifiedName~Items|FullyQualifiedName~Healing|FullyQualifiedName~Population"`; live-test pickup, replacement, potion use under attack, and death; commit.
 
 **Alpha.2 gate:** A terminal run supports combat, loot, healing, and permanent death.
 
@@ -183,11 +183,11 @@ Use test class names matching the filters below: `FoundationTests`, `WorldTests`
 **Depends on:** T1004.  
 **Files:** `GameSession.cs`, generation/population; Controller/View outcome handling; descent/victory tests.
 
-- [ ] Add `DescentRequiresStaircase`, `DescentPreservesResources`, `NewFloorStartsUnexplored`, and `NoAscentCommandExists`.
-- [ ] Implement depth progression from 1 through 10. Drop prior-floor gameplay state, keeping run/player resources and reproducible seed handling.
-- [ ] Add `TenthLevelHasGoalAndNoDownStaircase`, `GoalWinsBeforeEnemyPhase`, and `CommandsAfterVictoryDoNothing`.
-- [ ] Implement the final destination, immediate victory, final screen, and fresh-run action. Enemy-free fixtures must complete all ten levels without a hidden combat requirement.
-- [ ] Run `dotnet test Icod.LiteRogue.sln --filter "FullyQualifiedName~Descent|FullyQualifiedName~Victory|FullyQualifiedName~CompleteRun"`; complete a live win and loss, record seed/version, and commit.
+- [x] Add `DescentRequiresStaircase`, `DescentPreservesResources`, `NewFloorStartsUnexplored`, and `NoAscentCommandExists`.
+- [x] Implement depth progression from 1 through 10. Drop prior-floor gameplay state, keeping run/player resources and reproducible seed handling.
+- [x] Add `TenthLevelHasGoalAndNoDownStaircase`, `GoalWinsBeforeEnemyPhase`, and `CommandsAfterVictoryDoNothing`.
+- [x] Implement the final destination, immediate victory, final screen, and fresh-run action. Enemy-free fixtures must complete all ten levels without a hidden combat requirement.
+- [x] Run `dotnet test Icod.LiteRogue.sln --filter "FullyQualifiedName~Descent|FullyQualifiedName~Victory|FullyQualifiedName~CompleteRun"`; complete a live win and loss, record seed/version, and commit.
 
 **Alpha.3 gate:** Every approved gameplay system is integrated. A new run can complete from floor 1 to victory on floor 10.
 
@@ -250,4 +250,4 @@ A passing command requires exit code 0, passing tests, and the expected package/
 
 ## Plan review and execution
 
-Review the proposed defaults and tranche gates before implementation. Keep the design, this plan, and the main roadmap together. Implement one accepted tranche at a time, recording tests and playability at each checkpoint. No implementation or release is claimed by this planning PR.
+Review the proposed defaults and tranche gates before implementation. Keep the design, this plan, and the main roadmap together. Implement one accepted tranche at a time, recording tests and playability at each checkpoint. Implementation checkpoints are recorded below; published release and platform acceptance gates remain separate.

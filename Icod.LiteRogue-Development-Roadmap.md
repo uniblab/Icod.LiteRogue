@@ -1,7 +1,7 @@
 # Icod.LiteRogue Development Roadmap
 
 **Target:** 1.0.0  
-**Status:** Plan approved; T1000 foundation implemented; generation and visibility implemented; application work active  
+**Status:** Complete gameplay implemented at unreleased alpha.3; balance/platform acceptance and stable release pending
 **Updated:** October 3, 2026  
 **Repository:** [uniblab/Icod.LiteRogue](https://github.com/uniblab/Icod.LiteRogue)
 
@@ -27,7 +27,7 @@ These are acceptance milestones, not dates. Additional alpha or release-candidat
 
 ## Tranches
 
-T1000 passes the shared Debug build/test/pack/validate procedure. Generation and visibility pass a 10,000-case seed/depth sweep; entity visibility checks follow the actor implementation in T1003. Later release gates require the recorded application and platform checks.
+T1000–T1005 are implemented. Automated terrain and population checks each cover 10,000 seed/depth cases. Twenty balance simulations cover ten seeds, with both wins and deaths. T1006–T1007 automation and documentation are present; human balance and live platform acceptance remain pending. T1008 is intentionally unstarted until the candidate is accepted. See [acceptance evidence](docs/Terminal-Testing.md).
 
 | Tranche | Deliverable | Depends on |
 | --- | --- | --- |
