@@ -32,7 +32,7 @@
   <ItemGroup>
     <ProjectReference Include="../Icod.LiteRogue.Model/Icod.LiteRogue.Model.csproj" />
     <PackageReference Include="Icod.DCurses" Version="2.2.0" />
-    <None Include="../../README.md" Pack="true" PackagePath="/" />
+    <None Include="../../README.md" Pack="true" PackagePath="/" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../LICENSE" Pack="true" PackagePath="/" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../THIRD-PARTY-NOTICES.md" Pack="true" PackagePath="/" />
     <None Include="../../LICENSES/*" Pack="true" PackagePath="LICENSES/" />
