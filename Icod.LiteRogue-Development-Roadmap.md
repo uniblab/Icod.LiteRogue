@@ -1,7 +1,7 @@
 # Icod.LiteRogue Development Roadmap
 
 **Target:** 1.0.0  
-**Status:** Design approved; implementation plan proposed; implementation has not begun  
+**Status:** Plan approved; T1000 foundation implemented; generation and visibility implemented; application work active  
 **Updated:** October 3, 2026  
 **Repository:** [uniblab/Icod.LiteRogue](https://github.com/uniblab/Icod.LiteRogue)
 
@@ -27,7 +27,7 @@ These are acceptance milestones, not dates. Additional alpha or release-candidat
 
 ## Tranches
 
-All implementation tranches are initially pending.
+T1000 passes the shared Debug build/test/pack/validate procedure. Generation and visibility pass a 10,000-case seed/depth sweep; entity visibility checks follow the actor implementation in T1003. Later release gates require the recorded application and platform checks.
 
 | Tranche | Deliverable | Depends on |
 | --- | --- | --- |

@@ -10,7 +10,7 @@
 
 **Spec:** [Approved game design](../../Icod.LiteRogue-Design.md)  
 **Main roadmap:** [Release sequence and tranche status](../../../Icod.LiteRogue-Development-Roadmap.md)  
-**Status:** Proposed development plan; all implementation tasks pending  
+**Status:** Approved; implementation active  
 **Date:** October 3, 2026
 
 ## Global constraints
@@ -23,7 +23,7 @@
 - One equipped weapon, one equipped suit of armor, and a potion count; collection and better-equipment replacement are automatic.
 - Entering a room reveals its interior; explored terrain remains mapped; entities obey current visibility.
 - The Model has no dependency on Icod.DCurses or terminal input. Rendering and resizing do not mutate game state.
-- Ship the requested LGPL3 text as root `LICENSE`, with matching license notices in delivered artifacts.
+- Ship the requested GPL3 text as root `LICENSE`, with matching license notices in delivered artifacts. The Model is private; the application is the single NuGet .NET tool package.
 - C#, PowerShell, and ordinary shell/cmd scripts are sufficient for the product and its build tooling.
 
 ## Proposed implementation defaults
@@ -214,7 +214,7 @@ Use test class names matching the filters below: `FoundationTests`, `WorldTests`
 - [ ] Complete and harden the distribution workflow introduced at T1000. Validate PR Staging and main Release artifacts; tagged releases require the tag version to match package metadata and the tagged source to be contained in main.
 - [ ] Produce and verify framework-dependent archives for `win-x64`, `win-arm64`, `linux-x64`, `linux-arm64`, `osx-x64`, and `osx-arm64`. Follow the shared archive convention and document the required .NET 10 runtime. Copy the player guide and license notices alongside the executable.
 - [ ] Add clean-directory package installation checks. Run `dotnet tool install Icod.LiteRogue --version 1.0.0-rc.1 --add-source artifacts/packages --tool-path artifacts/tool-smoke`, then verify the installed `literogue --version` and `--help`.
-- [ ] Verify archives contain the app and dependencies, version information, player documentation, LGPL text and required dependency notices. Create checksums and test an extracted installation on each advertised platform.
+- [ ] Verify archives contain the app and dependencies, version information, player documentation, GPL text and required dependency notices. Create checksums and test an extracted installation on each advertised platform.
 - [ ] Finish README install/run examples, controls, glyph legend, potion/gear rules, victory/death/descent explanation, seed reporting, terminal requirements, uninstall instructions, and troubleshooting.
 - [ ] Run `build.cmd` on Windows and `./build.sh` on Unix-like hosts; require clean/restore/build/test/pack/validate success. Record live launch, resize, quit, and terminal restoration from the actual packaged application.
 

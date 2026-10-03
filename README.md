@@ -16,4 +16,4 @@ The planned project structure consists of a game-model library and a console app
 
 ## License
 
-GNU Lesser General Public License, version 3. See [LICENSE](LICENSE), copied from [uniblab/.github](https://github.com/uniblab/.github/blob/main/LGPL3.LICENSE).
+GNU General Public License, version 3. See [LICENSE](LICENSE), copied from [uniblab/.github](https://github.com/uniblab/.github/blob/main/GPL3.LICENSE).
