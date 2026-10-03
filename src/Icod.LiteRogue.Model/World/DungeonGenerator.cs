@@ -129,7 +129,7 @@ public static class DungeonGenerator {
 				}
 				foreach (var direction in directions) {
 					var next = new GridPosition(current.X + direction.X, current.Y + direction.Y);
-					if (next.X < 0 || next.Y < 0 || next.X >= width || next.Y >= height || tiles[next.Y * width + next.X] != TerrainType.Wall || parents.ContainsKey(next)) continue;
+					if (next.X < 0 || next.Y < 0 || next.X >= width || next.Y >= height || tiles[next.Y * width + next.X] != TerrainType.Wall || rooms.Any(room => room.Contains(next)) || parents.ContainsKey(next)) continue;
 					if (next != start && next != end && HasAdjacentDoor(next)) continue;
 					parents.Add(next, current);
 					pending.Enqueue(next);

@@ -70,6 +70,15 @@ public sealed class WorldTests {
 		}
 	}
 	[Fact]
+	public void CorridorsEnterRoomsOnlyThroughDoors() {
+		for (int seed = 0; seed < 1000; seed++) for (int depth = 1; depth <= 10; depth++) {
+			var level = DungeonGenerator.Generate(depth, seed, GameRules.Default);
+			Assert.DoesNotContain(level.WalkablePositions(), position => level.At(position) == TerrainType.Corridor && level.Rooms.Any(room => room.Contains(position)));
+			foreach (var room in level.Rooms) foreach (var position in level.WalkablePositions().Where(position => room.Contains(position) && !room.ContainsInterior(position)))
+				Assert.Equal(TerrainType.Door, level.At(position));
+		}
+	}
+	[Fact]
 	public void SingleRoomHasDistinctEntryAndObjective() {
 		var level = DungeonGenerator.Generate(1, 7, GameRules.Default with { RoomChance = 0 });
 		Assert.Single(level.Rooms);
