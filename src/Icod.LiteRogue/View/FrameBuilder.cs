@@ -17,6 +17,8 @@ public static class FrameBuilder {
                 line[x-left]=position==snapshot.Player?'@':!tile.Explored?' ':tile.Terrain switch {
                     Model.World.TerrainType.Wall=>'#',Model.World.TerrainType.Floor=>'.',Model.World.TerrainType.Corridor=>':',Model.World.TerrainType.Door=>'+',Model.World.TerrainType.Staircase=>'>',Model.World.TerrainType.Goal=>'&',_=>' '
                 };
+                if(position!=snapshot.Player && snapshot.Loot?.FirstOrDefault(e=>e.Position==position) is {} item) line[x-left]=item.Kind switch { Model.Items.LootKind.Weapon=>')',Model.Items.LootKind.Armor=>']',_=>'!' };
+                if(position!=snapshot.Player && snapshot.Enemies?.FirstOrDefault(e=>e.Position==position) is {} enemy) line[x-left]=enemy.Glyph;
             }
             lines.Add(new string(line));
         }
