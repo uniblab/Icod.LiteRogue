@@ -136,6 +136,14 @@ See the [packaging procedures](packaging/README.md) for distribution and Trusted
 
 [Open an issue](https://github.com/uniblab/Icod.LiteRogue/issues/new) with the game version, operating system and CPU, terminal name and version, run seed, and the commands or steps that reproduce the problem. For display or input problems, also include the terminal dimensions and whether arrow, keypad, or vi-style movement keys were used.
 
+## Authorship and inspiration
+
+Rogue was originally created by Michael Toy and [Glenn Wichman](https://en.wikipedia.org/wiki/Glenn_Wichman), with later contributions by [Ken Arnold](https://en.wikipedia.org/wiki/Ken_Arnold). Their work is the inspiration for Icod.LiteRogue.
+
+This .NET implementation is by Timothy J. Bruce.
+
+Copyright (C) 2026 Timothy J. Bruce \<uniblab@hotmail.com\>.
+
 ## License
 
 Icod.LiteRogue is licensed under the GNU General Public License, version 3. See [LICENSE](LICENSE), copied from [uniblab/.github](https://github.com/uniblab/.github/blob/main/GPL3.LICENSE).
