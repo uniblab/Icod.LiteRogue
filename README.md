@@ -6,7 +6,7 @@ Explore ten procedurally generated dungeon levels. Each level uses a 3x3 arrange
 
 ## Install and play
 
-Requires the .NET 10 runtime and an interactive terminal. Once a prerelease is published:
+Installing the NuGet tool requires the .NET 10 SDK and an interactive terminal for gameplay. Downloaded framework-dependent archives require the .NET 10 runtime. Once a prerelease is published:
 
 ```sh
 dotnet tool install --global Icod.LiteRogue --version 1.0.0-alpha.3

@@ -147,3 +147,7 @@ Most repositories should only need to adjust:
 - product-specific smoke tests if deeper behavioral verification is required.
 
 Do not derive solution/project/package paths from `${{ github.event.repository.name }}` simply because names happen to match. Repository layout and GitHub metadata are separate contracts.
+
+## Build procedure adaptations
+
+Procedures were imported from `uniblab/.github` and adapted for this single tool: repository-relative metadata for cross-platform jobs; a Staging solution configuration; test-project exclusion from executable discovery; removal of stale local tool packages before pack; exact package/docs/license validation; isolated candidate feed/cache installation; native archive extraction/help/version checks. PR and main validation run all six RIDs. Tagged publication requires the selected version, passing Release tests/install checks and successful native distribution verification before either registry. NuGet OIDC uses `release.yaml` and `Release`, with the repository owner as the default username.

@@ -89,6 +89,12 @@ jobs:
           -c ${{ env.CONFIGURATION }}
           --no-restore
           -p:ContinuousIntegrationBuild=true
+      - name: Test exact Release inputs
+        run: >-
+          dotnet test '${{ needs.metadata.outputs.solution_path }}'
+          -c ${{ env.CONFIGURATION }}
+          --no-build
+          --no-restore
       - name: Pack release candidates
         run: >-
           dotnet pack '${{ needs.metadata.outputs.solution_path }}'
@@ -106,7 +112,7 @@ jobs:
           -DestinationDirectory '${{ env.SELECTED_PACKAGE_DIRECTORY }}'
           -ExpectedVersion '${{ needs.metadata.outputs.version }}'
           -GitHubOutputPath $env:GITHUB_OUTPUT
-      - name: Verify exact release package artifacts
+      - name: Require one tool matching the tag
         if: steps.select.outputs.package_count != '1'
         shell: pwsh
         run: throw 'The tag must match exactly one Icod.LiteRogue tool package version.'
@@ -118,6 +124,12 @@ jobs:
           -ArtifactDirectory '${{ env.SELECTED_PACKAGE_DIRECTORY }}'
           -Configuration '${{ env.CONFIGURATION }}'
           -ExpectedVersion '${{ needs.metadata.outputs.version }}'
+      - name: Verify selected tool installation
+        shell: pwsh
+        run: >-
+          ./packaging/VerifyToolInstall.ps1
+          -PackageDirectory '${{ env.SELECTED_PACKAGE_DIRECTORY }}'
+          -Version '${{ needs.metadata.outputs.version }}'
       - name: Upload release packages
         if: steps.select.outputs.has_packages == 'true'
         uses: actions/upload-artifact@v4
@@ -153,14 +165,12 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-      - name: Build release archive
+      - name: Verify exact native distribution and archive
         shell: pwsh
         run: >-
-          ./packaging/BuildReleaseArchive.ps1
+          ./packaging/VerifyDistribution.ps1
           -Configuration '${{ env.CONFIGURATION }}'
           -RuntimeIdentifier '${{ matrix.rid }}'
-          -Version '${{ needs.metadata.outputs.version }}'
-          -ArchiveBaseName '${{ github.event.repository.name }}'
       - name: Upload release archive
         uses: actions/upload-artifact@v4
         with:

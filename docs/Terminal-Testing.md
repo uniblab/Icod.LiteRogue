@@ -7,7 +7,7 @@ Build under test: **1.0.0-alpha.3**. Acceptance evidence below distinguishes aut
 - Model and application tests cover generation, visibility, eight-direction movement, closed corners, combat, sequential enemy turns, death, loot, healing, descent, victory, deterministic commands, immutable snapshots, help, resize, CLI validation and cleanup on input failure/cancellation.
 - Seeds 0–999 at all ten depths: connected terrain, sector bounds, reachable objectives, reserved population tiles and no initial entity overlaps (10,000 terrain cases and 10,000 populated cases).
 - Debug shared build: clean, restore, build, test, pack, exact artifact validation.
-- Staging and Release distribution procedures include clean local tool installation, help/version checks, archive creation and extracted executable checks. CI runs these on Windows/Linux/macOS, x64 and ARM64. A successful headless job does not prove live terminal behavior.
+- Staging and Release distribution procedures include clean local tool installation, help/version checks, archive creation and extracted executable checks. CI run [37116276249](https://github.com/uniblab/Icod.LiteRogue/actions/runs/37116276249) passed these checks on Windows/Linux/macOS, x64 and ARM64. A successful headless job does not prove live terminal behavior.
 - One tool package contains the Model and pinned dependencies. Package checks require exact GPL and dependency license hashes, tool metadata, documentation and all runtime assemblies. Archives include a framework-dependent single-file app, player guide, README and license notices.
 
 ## Linux live evidence

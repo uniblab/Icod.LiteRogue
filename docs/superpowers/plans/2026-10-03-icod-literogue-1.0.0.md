@@ -196,12 +196,12 @@ Use test class names matching the filters below: `FoundationTests`, `WorldTests`
 **Depends on:** T1005.  
 **Files:** Rules/content tables; Model/application regression tests; `docs/Terminal-Testing.md`; player guide and changelog.
 
-- [ ] Repeat the seed/depth sweep with full population. Check objectives, entity overlap, nonnegative resources, and terminal outcomes.
-- [ ] Add `SameSeedAndCommandsRepeatRun`, `RedrawDoesNotAdvanceRandomness`, and `SnapshotsCannotLeakHiddenEntities`.
+- [x] Repeat the seed/depth sweep with full population. Check objectives, entity overlap, nonnegative resources, and terminal outcomes.
+- [x] Add `SameSeedAndCommandsRepeatRun`, `RedrawDoesNotAdvanceRandomness`, and `SnapshotsCannotLeakHiddenEntities`.
 - [ ] Add regressions for the five Review Focus conditions, including repeated host cleanup and recovery from a tiny terminal. Fix each observed failure before adding broader tests.
 - [ ] Play a recorded set of at least ten varied seeds, including wins and deaths. Record loot scarcity, early unavoidable fights, damage spikes, and usefulness of exploration; tune the content tables without introducing new systems.
 - [ ] Verify terminal behavior on Windows, Linux, and macOS, including at least one x64 and one ARM64 environment across the matrix. Record exact terminal/OS/build versions and limitations.
-- [ ] Run the complete tests in Debug, Staging, and Release; commit the tuned tables and acceptance evidence.
+- [x] Run the complete tests in Debug, Staging, and Release; commit the tuned tables and acceptance evidence.
 
 **Alpha.4 gate:** The complete game has documented balance feedback and passes generation, gameplay, input, resize, and terminal-restoration checks.
 
@@ -210,12 +210,12 @@ Use test class names matching the filters below: `FoundationTests`, `WorldTests`
 **Depends on:** T1006.  
 **Files:** Application package metadata; release/build/packaging scripts and workflows; README, changelog, player guide, terminal guide, package license notices.
 
-- [ ] Package one .NET tool: package ID `Icod.LiteRogue`, command `literogue`. Include the private Model assembly, pinned runtime dependencies, README, and the exact root license.
-- [ ] Complete and harden the distribution workflow introduced at T1000. Validate PR Staging and main Release artifacts; tagged releases require the tag version to match package metadata and the tagged source to be contained in main.
-- [ ] Produce and verify framework-dependent archives for `win-x64`, `win-arm64`, `linux-x64`, `linux-arm64`, `osx-x64`, and `osx-arm64`. Follow the shared archive convention and document the required .NET 10 runtime. Copy the player guide and license notices alongside the executable.
+- [x] Package one .NET tool: package ID `Icod.LiteRogue`, command `literogue`. Include the private Model assembly, pinned runtime dependencies, README, and the exact root license.
+- [x] Complete and harden the distribution workflow introduced at T1000. Validate PR Staging and main Release artifacts; tagged releases require the tag version to match package metadata and the tagged source to be contained in main.
+- [x] Produce and verify framework-dependent archives for `win-x64`, `win-arm64`, `linux-x64`, `linux-arm64`, `osx-x64`, and `osx-arm64`. Follow the shared archive convention and document the required .NET 10 runtime. Copy the player guide and license notices alongside the executable.
 - [ ] Add clean-directory package installation checks. Run `dotnet tool install Icod.LiteRogue --version 1.0.0-rc.1 --add-source artifacts/packages --tool-path artifacts/tool-smoke`, then verify the installed `literogue --version` and `--help`.
-- [ ] Verify archives contain the app and dependencies, version information, player documentation, GPL text and required dependency notices. Create checksums and test an extracted installation on each advertised platform.
-- [ ] Finish README install/run examples, controls, glyph legend, potion/gear rules, victory/death/descent explanation, seed reporting, terminal requirements, uninstall instructions, and troubleshooting.
+- [x] Verify archives contain the app and dependencies, version information, player documentation, GPL text and required dependency notices. Create checksums and test an extracted installation on each advertised platform.
+- [x] Finish README install/run examples, controls, glyph legend, potion/gear rules, victory/death/descent explanation, seed reporting, terminal requirements, uninstall instructions, and troubleshooting.
 - [ ] Run `build.cmd` on Windows and `./build.sh` on Unix-like hosts; require clean/restore/build/test/pack/validate success. Record live launch, resize, quit, and terminal restoration from the actual packaged application.
 
 **RC.1 gate:** Version `1.0.0-rc.1` is ready to publish as a prerelease. Freeze controls, distribution layout, and gameplay scope. Remaining changes fix defects or documentation.
