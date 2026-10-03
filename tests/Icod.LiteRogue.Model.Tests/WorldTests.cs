@@ -47,6 +47,29 @@ public sealed class WorldTests {
 		}
 	}
 	[Fact]
+	public void DoorsNeverTouch() {
+		for (int seed = 0; seed < 1000; seed++) for (int depth = 1; depth <= 10; depth++) {
+			var level = DungeonGenerator.Generate(depth, seed, GameRules.Default);
+			var doors = level.WalkablePositions().Where(p => level.At(p) == TerrainType.Door).ToArray();
+			foreach (var door in doors) foreach (var other in doors)
+				if (door != other)
+					Assert.True(Math.Abs(door.X - other.X) > 1 || Math.Abs(door.Y - other.Y) > 1, $"Adjacent doors for seed {seed}, depth {depth}.");
+		}
+	}
+	[Fact]
+	public void HallwaysNeverBecomeTwoCellsThick() {
+		for (int seed = 0; seed < 1000; seed++) for (int depth = 1; depth <= 10; depth++) {
+			var level = DungeonGenerator.Generate(depth, seed, GameRules.Default);
+			for (int y = 0; y < level.Height - 1; y++) for (int x = 0; x < level.Width - 1; x++) {
+				bool IsHallway(GridPosition p) => level.At(p) is TerrainType.Corridor or TerrainType.Door;
+				Assert.False(
+					IsHallway(new(x, y)) && IsHallway(new(x + 1, y)) && IsHallway(new(x, y + 1)) && IsHallway(new(x + 1, y + 1)),
+					$"Two-cell-thick hallway for seed {seed}, depth {depth} at ({x}, {y})."
+				);
+			}
+		}
+	}
+	[Fact]
 	public void SingleRoomHasDistinctEntryAndObjective() {
 		var level = DungeonGenerator.Generate(1, 7, GameRules.Default with { RoomChance = 0 });
 		Assert.Single(level.Rooms);
