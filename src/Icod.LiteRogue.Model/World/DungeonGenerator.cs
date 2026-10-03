@@ -39,6 +39,11 @@ public static class DungeonGenerator {
 	private static bool TryGenerate(int depth, GameRules rules, Random random, out DungeonLevel level) {
 		int width = rules.Width, height = rules.Height, sw = width / 3, sh = height / 3;
 		var tiles = new TerrainType[width * height];
+		var reserved = new bool[tiles.Length];
+		var nearDoor = new bool[tiles.Length];
+		var parents = new int[tiles.Length];
+		var pending = new int[tiles.Length];
+		var destinations = new int[tiles.Length];
 		var rooms = new List<Room>();
 		for (int sector = 0; sector < 9; sector++) if (random.NextDouble() < rules.RoomChance) AddRoom(sector);
 		if (rooms.Count == 0) AddRoom(random.Next(9));
@@ -82,21 +87,27 @@ public static class DungeonGenerator {
 			int rw = random.Next(4, Math.Min(24, sw - 2) + 1), rh = random.Next(4, Math.Min(5, sh - 2) + 1);
 			int x = sector % 3 * sw + random.Next(1, sw - rw), y = sector / 3 * sh + random.Next(1, sh - rh);
 			var room = new Room(sector, x, y, rw, rh); rooms.Add(room);
+			for (int yy = y; yy < y + rh; yy++) for (int xx = x; xx < x + rw; xx++) reserved[yy * width + xx] = true;
 			for (int yy = y + 1; yy < y + rh - 1; yy++) for (int xx = x + 1; xx < x + rw - 1; xx++) tiles[yy * width + xx] = TerrainType.Floor;
 		}
 		bool TryConnect(Room firstRoom, Room secondRoom) {
-			foreach (var first in Doorways(firstRoom).OrderBy(_ => random.Next())) foreach (var second in Doorways(secondRoom).OrderBy(_ => random.Next())) {
-				if (DoorsTouch(first.Position, second.Position) || HasAdjacentDoor(first.Position) || HasAdjacentDoor(second.Position)) continue;
-				if (!TryFindRoute(first.Outside, second.Outside, out var corridor)) continue;
-				var hallway = corridor.Append(first.Position).Append(second.Position).ToHashSet();
-				if (CreatesThickHallway(hallway)) continue;
-				tiles[first.Position.Y * width + first.Position.X] = TerrainType.Door;
-				tiles[second.Position.Y * width + second.Position.X] = TerrainType.Door;
-				foreach (var position in corridor) tiles[position.Y * width + position.X] = TerrainType.Corridor;
-				return true;
+			var ends = Doorways(secondRoom).Where(IsAvailableDoorway).ToArray();
+			if (ends.Length == 0) return false;
+			// Prefer nearby facing walls, with seeded variation among equally
+			// close doors, instead of winding around rooms from arbitrary sides.
+			foreach (var first in Doorways(firstRoom).Where(IsAvailableDoorway)
+				.OrderBy(door => ends.Min(end => ManhattanDistance(door.Outside, end.Outside))).ThenBy(_ => random.Next())) {
+				Array.Fill(destinations, -1);
+				for (int i = 0; i < ends.Length; i++)
+					if (!DoorsTouch(first.Position, ends[i].Position)) destinations[Index(ends[i].Outside)] = i;
+				if (TryFindRoute(first, ends)) return true;
 			}
 			return false;
 		}
+		int Index(GridPosition position) => position.Y * width + position.X;
+		bool IsAvailableDoorway(Doorway doorway) => IsInsideBorder(doorway.Outside) && !nearDoor[Index(doorway.Position)]
+			&& tiles[Index(doorway.Outside)] == TerrainType.Wall && !reserved[Index(doorway.Outside)];
+		bool IsInsideBorder(GridPosition position) => position.X > 0 && position.Y > 0 && position.X < width - 1 && position.Y < height - 1;
 		IEnumerable<Doorway> Doorways(Room room) {
 			for (int x = room.X + 1; x < room.X + room.Width - 1; x++) {
 				yield return new(new(x, room.Y), new(x, room.Y - 1));
@@ -107,32 +118,50 @@ public static class DungeonGenerator {
 				yield return new(new(room.X + room.Width - 1, y), new(room.X + room.Width, y));
 			}
 		}
-		bool HasAdjacentDoor(GridPosition position) {
+		void PlaceDoor(GridPosition position) {
+			tiles[Index(position)] = TerrainType.Door;
 			for (int y = position.Y - 1; y <= position.Y + 1; y++) for (int x = position.X - 1; x <= position.X + 1; x++)
-				if (x >= 0 && y >= 0 && x < width && y < height && tiles[y * width + x] == TerrainType.Door) return true;
-			return false;
+				if (x >= 0 && y >= 0 && x < width && y < height) nearDoor[y * width + x] = true;
 		}
-		bool TryFindRoute(GridPosition start, GridPosition end, out List<GridPosition> route) {
-			route = [];
-			if (tiles[start.Y * width + start.X] != TerrainType.Wall || tiles[end.Y * width + end.X] != TerrainType.Wall) return false;
-			var parents = new Dictionary<GridPosition, GridPosition> { [start] = start };
-			var pending = new Queue<GridPosition>(); pending.Enqueue(start);
+		bool TryFindRoute(Doorway first, Doorway[] ends) {
+			// One search tests every destination doorway. Reuse indexed buffers so
+			// unsuccessful door pairs do not allocate and search the grid again.
+			int start = Index(first.Outside);
+			Array.Fill(parents, -1);
+			parents[start] = start;
+			int head = 0, tail = 0;
+			pending[tail++] = start;
 			var directions = random.Next(2) == 0
 				? new[] { new GridPosition(1, 0), new GridPosition(0, 1), new GridPosition(-1, 0), new GridPosition(0, -1) }
 				: new[] { new GridPosition(0, 1), new GridPosition(1, 0), new GridPosition(0, -1), new GridPosition(-1, 0) };
-			while (pending.TryDequeue(out var current)) {
-				if (current == end) {
-					for (var position = end; position != start; position = parents[position]) route.Add(position);
-					route.Add(start);
-					route.Reverse();
-					return true;
+			while (head < tail) {
+				int current = pending[head++];
+				if (destinations[current] >= 0) {
+					var second = ends[destinations[current]];
+					var corridor = new List<GridPosition>();
+					for (int position = current; ; position = parents[position]) {
+						corridor.Add(new(position % width, position / width));
+						if (position == start) break;
+					}
+					var hallway = corridor.Append(first.Position).Append(second.Position).ToHashSet();
+					if (!CreatesThickHallway(hallway)) {
+						PlaceDoor(first.Position);
+						PlaceDoor(second.Position);
+						foreach (var position in corridor) tiles[Index(position)] = TerrainType.Corridor;
+						return true;
+					}
+					// An endpoint may border an existing door; it is not a passage
+					// through that door's exclusion area to another endpoint.
+					if (current != start && nearDoor[current]) continue;
 				}
 				foreach (var direction in directions) {
-					var next = new GridPosition(current.X + direction.X, current.Y + direction.Y);
-					if (next.X < 0 || next.Y < 0 || next.X >= width || next.Y >= height || tiles[next.Y * width + next.X] != TerrainType.Wall || rooms.Any(room => room.Contains(next)) || parents.ContainsKey(next)) continue;
-					if (next != start && next != end && HasAdjacentDoor(next)) continue;
-					parents.Add(next, current);
-					pending.Enqueue(next);
+					int x = current % width + direction.X, y = current / width + direction.Y;
+					if (x <= 0 || y <= 0 || x >= width - 1 || y >= height - 1) continue;
+					int next = y * width + x;
+					if (tiles[next] != TerrainType.Wall || reserved[next] || parents[next] >= 0) continue;
+					if (nearDoor[next] && destinations[next] < 0) continue;
+					parents[next] = current;
+					pending[tail++] = next;
 				}
 			}
 			return false;
