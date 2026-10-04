@@ -1,8 +1,11 @@
 # Icod.LiteRogue Development Roadmap
 
-**Target:** 1.0.0  
-**Status:** Complete gameplay implemented at unreleased alpha.3; balance/platform acceptance and stable release pending
-**Updated:** October 3, 2026  
+**Target:** 1.0.0
+
+**Status:** Maintainer accepted the existing game for stable 1.0.0; version promoted; merge and publication pending
+
+**Updated:** October 4, 2026
+
 **Repository:** [uniblab/Icod.LiteRogue](https://github.com/uniblab/Icod.LiteRogue)
 
 ## Product direction
@@ -13,21 +16,23 @@ The [game design](docs/Icod.LiteRogue-Design.md) defines the approved gameplay a
 
 ## Release sequence
 
+On October 4, 2026, the maintainer accepted the existing game for release as-is and approved promotion to **1.0.0**. The release retains **Icod.DCurses 2.2.0** and does not wait for further dependency development. Alpha.1 through alpha.3 served as internal checkpoints; separate alpha.4 and RC.1 publications are omitted. Additional human balance feedback and live platform testing continue as follow-up work. Automated build, test, package, installation and archive checks still apply to the exact release candidate.
+
 | Milestone | Work | Player-visible result | Gate |
 | --- | --- | --- | --- |
 | Foundation | T1000 | Model/application boundaries and automated checks | Model operates without a terminal or DCurses dependency |
 | 1.0.0-alpha.1 | T1001–T1002 | Explore a generated floor through DCurses | Connected generation, legal movement, fog, HUD, input, and terminal restoration work |
 | 1.0.0-alpha.2 | T1003–T1004 | Fight, collect upgrades, drink potions, and die | Combat, enemy turns, equipment, healing, and death are integrated |
 | 1.0.0-alpha.3 | T1005 | Play the complete ten-level descent and win | All approved gameplay is present; runs can end in victory or death |
-| 1.0.0-alpha.4 | T1006 | A balanced, dependable complete game | Seed sweeps, terminal hardening, and documented playtests pass |
-| 1.0.0-rc.1 | T1007 | Installable candidate with final controls and documentation | Clean installation, package/archive checks, and platform acceptance pass |
+| 1.0.0-alpha.4 (internal scope; separate publication omitted) | T1006 | Reproducibility and terminal hardening | Automation implemented; existing balance accepted; further playtests tracked as follow-up |
+| 1.0.0-rc.1 (internal scope; separate publication omitted) | T1007 | Installable candidate with final controls and documentation | Packaging and documentation implemented; maintainer accepts remaining live-platform coverage as follow-up |
 | 1.0.0 | T1008 | Stable release | Final checklist passes on the tagged source commit |
 
 These are acceptance milestones, not dates. Additional alpha or release-candidate revisions may fix defects without expanding the 1.0.0 scope. A milestone may remain an internal checkpoint if publishing it would add no useful testing opportunity.
 
 ## Tranches
 
-T1000–T1005 are implemented. Automated terrain and population checks each cover 10,000 seed/depth cases. Twenty balance simulations cover ten seeds, with both wins and deaths. T1006–T1007 automation and documentation are present; human balance and live platform acceptance remain pending. T1008 is intentionally unstarted until the candidate is accepted. See [acceptance evidence](docs/Terminal-Testing.md).
+T1000–T1005 are implemented. A combined terrain/population sweep checks 10,000 seed/depth cases, with additional dense, sparse and minimum-size layouts. Earlier balance simulations covered ten seeds and both wins and deaths; those results predate the latest generator changes. T1006–T1007 automation and documentation are implemented and accepted for this release; additional human balance and live platform coverage remain follow-up work. T1008 release acceptance and version promotion are complete; merge, final tagged verification and publication remain pending. See [acceptance evidence](docs/Terminal-Testing.md).
 
 | Tranche | Deliverable | Depends on |
 | --- | --- | --- |
@@ -48,6 +53,8 @@ T1000–T1005 are implemented. Automated terrain and population checks each cove
 The Model owns rules and state. Icod.DCurses remains confined to the application View and its terminal adapters. Display refreshes and resizing do not advance turns or regenerate the dungeon.
 
 ## Release practice
+
+The current application and package version is **1.0.0**. Validate this candidate, merge PR #2 into `main`, allow main's Release distribution checks to pass, then create `v1.0.0` on the accepted merged commit. The tag-triggered workflow verifies the matching package and all six native archives before publishing. No merge, tag or publication is performed by the version-promotion change itself.
 
 Use package versions such as `1.0.0-alpha.1`, `1.0.0-rc.1`, and `1.0.0`, with matching tags `v1.0.0-alpha.1`, `v1.0.0-rc.1`, and `v1.0.0`. Mark alpha and candidate GitHub Releases as prereleases.
 

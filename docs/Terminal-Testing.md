@@ -1,16 +1,19 @@
 # Terminal and release acceptance
 
-Build under test: **1.0.0-alpha.3**. Acceptance evidence below distinguishes automated checks from human playtesting. Stable 1.0.0 remains gated on maintainer acceptance, live Windows/macOS checks and human balance feedback.
+Release candidate: **1.0.0**, promoted from the complete alpha.3 implementation. On October 4, 2026, the maintainer accepted the existing game for stable release as-is, retaining Icod.DCurses 2.2.0. Further human balance feedback and live platform coverage are follow-up work. Automated checks still apply to the exact 1.0.0 artifacts before publication. Acceptance evidence below distinguishes completed checks from follow-up testing.
 
 ## Automated evidence
 
 - Model and application tests cover generation, visibility, eight-direction movement, closed corners, combat, sequential enemy turns, death, loot, healing, descent, victory, deterministic commands, immutable snapshots, help, resize, CLI validation and cleanup on input failure/cancellation.
-- Seeds 0–999 at all ten depths: connected terrain, sector bounds, reachable objectives, reserved population tiles and no initial entity overlaps (10,000 terrain cases and 10,000 populated cases).
+- Stable promotion: all 104 Release tests pass locally. The candidate package declares 1.0.0; installation from its isolated local feed/cache reports `1.0.0` and passes `--help`. Both packaged README copies match the source exactly.
+- Seeds 0–999 at all ten depths: one combined sweep checks connected terrain, sector bounds, reachable objectives, separated doors, one-cell-wide corridors, intact room walls, a solid outer border, reserved population tiles and no initial entity overlaps. Additional checks cover dense, sparse and minimum-size layouts and short passages between two rooms with facing walls.
 - Debug shared build: clean, restore, build, test, pack, exact artifact validation.
-- Staging and Release distribution procedures include clean local tool installation, help/version checks, archive creation and extracted executable checks. CI run [37116276249](https://github.com/uniblab/Icod.LiteRogue/actions/runs/37116276249) passed these checks on Windows/Linux/macOS, x64 and ARM64. A successful headless job does not prove live terminal behavior.
+- Staging and Release distribution procedures include clean local tool installation, help/version checks, archive creation and extracted executable checks. Pre-promotion CI run [37230672468](https://github.com/uniblab/Icod.LiteRogue/actions/runs/37230672468) passed Staging distribution checks on Windows/Linux/macOS, x64 and ARM64. These automated procedures apply again to the exact stable candidate and tagged source. A successful headless job does not prove live terminal behavior.
 - One tool package contains the Model and pinned dependencies. Package checks require exact GPL and dependency license hashes, tool metadata, documentation and all runtime assemblies. Archives include a framework-dependent single-file app, player guide, README and license notices.
 
 ## Linux live evidence
+
+The full victory/death traces and balance simulations below were recorded at alpha.3 before the later generator revisions. Their exact routes and outcomes are historical evidence. After those revisions, the installed tool was checked for prompt startup, immediate quit and terminal restoration; the current generator remains covered by the seed/depth sweep.
 
 Environment: Debian 12 Linux x64; native pseudo-terminal using `TERM=xterm-256color`; .NET SDK 10.0.401/runtime 10.0.12; DCurses 2.2.0. Native pseudo-terminal checks exercise the real rendering/input/lifecycle adapter rather than a fake View.
 
@@ -37,9 +40,9 @@ Both policies use known generated terrain; exploration collects generated loot b
 
 Exploration found the strongest gear and left 19–25 potions in these simulations. Rushing produced four wins and six deaths. Potion supply may be generous; retain the initial tables until human feedback can judge route knowledge, exploration cost and combat pressure. Enemies start at least four tiles from the entry, avoiding immediate arrival attacks. Record unavoidable opening fights and late damage spikes during human runs.
 
-## Remaining live platform gates
+## Follow-up live platform coverage
 
-| Platform | Headless gate | Live gate |
+| Platform | Automated checks | Live coverage |
 | --- | --- | --- |
 | Linux x64 | Build/test/install/archive | Native PTY; acceptance report in PR |
 | Linux ARM64 | CI build/test/install/archive | Pending |
@@ -48,4 +51,4 @@ Exploration found the strongest gear and left 19–25 potions in these simulatio
 
 For each live host record OS, CPU, terminal name/version, game/runtime version and seed. Test arrows, all diagonals (including keypad with Num Lock off), room/corridor fog, corridor fights, pickup, drinking under attack, death, victory and a fresh run. Shrink below 30x6 and enlarge again; the map and turn must stay unchanged. Quit normally, send end of input/interrupt and confirm the terminal cursor/echo/input modes recover. Repeat disposal to verify cleanup is idempotent.
 
-Publish alpha/RC tags only from accepted source on main. The release workflow must match the package version exactly and pass all six archive jobs before registry publication. The prepared NuGet Trusted Publishing policy is for repository `uniblab/Icod.LiteRogue`, workflow `release.yaml`, environment `Release`; the default NuGet username is `uniblab`. No static NuGet API key is required.
+Publish accepted versions only from source on main. The release workflow must match the package version exactly and pass all six archive jobs before registry publication. The prepared NuGet Trusted Publishing policy is for repository `uniblab/Icod.LiteRogue`, workflow `release.yaml`, environment `Release`; the default NuGet username is `uniblab`. No static NuGet API key is required.
